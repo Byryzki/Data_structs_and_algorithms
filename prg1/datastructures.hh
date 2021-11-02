@@ -181,11 +181,12 @@ public:
     TownID get_id();
 
 private:
-    // Add stuff needed for your class implementation here
+
     struct Town{
       std::string name_;
       Coord coord_;
       int tax_;
+      TownID master_;
     };
 
     std::map<TownID ,Town> Towns;
