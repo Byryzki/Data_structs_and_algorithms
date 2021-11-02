@@ -1,14 +1,13 @@
 // Datastructures.cc
 //
-// Student name:
-// Student email:
-// Student number:
+// Student name: Pyry Laine
+// Student email: pyry.j.laine@tuni.fi
+// Student number: 50282836
 
 #include "datastructures.hh"
-
 #include <random>
-
 #include <cmath>
+#include <algorithm>
 
 std::minstd_rand rand_engine; // Reasonably quick pseudo-random generator
 
@@ -40,68 +39,88 @@ Datastructures::~Datastructures()
 
 unsigned int Datastructures::town_count()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("town_count()");
+    return Towns.size();
 }
 
 void Datastructures::clear_all()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("clear_all()");
+    Towns.clear();
+    town_count();
 }
 
-bool Datastructures::add_town(TownID /*id*/, const Name &/*name*/, Coord /*coord*/, int /*tax*/)
-{
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("add_town()");
+bool Datastructures::add_town(TownID id, const Name &name , Coord coord, int tax)
+{    
+    if(Towns.find(id) != Towns.end()){ // ID already in use!
+        return false;
+    }
+
+    else{
+        Town newtown;
+        newtown.name_ = name;
+        newtown.coord_ = coord;
+        newtown.tax_ = tax;
+
+        Towns.insert({id, newtown});
+    }
+
+    return true;
 }
 
-Name Datastructures::get_town_name(TownID /*id*/)
+Name Datastructures::get_town_name(TownID id)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("get_town_name()");
+    return Towns[id].name_;
 }
 
-Coord Datastructures::get_town_coordinates(TownID /*id*/)
+Coord Datastructures::get_town_coordinates(TownID id)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("get_town_coordinates()");
+    return Towns[id].coord_;
 }
 
-int Datastructures::get_town_tax(TownID /*id*/)
+int Datastructures::get_town_tax(TownID id)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("get_town_tax()");
+    return Towns[id].tax_;
 }
 
 std::vector<TownID> Datastructures::all_towns()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("all_towns()");
+    std::vector<TownID> allIDs;
+    for(std::map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+        allIDs.push_back(i -> first);
+    }
+
+    return allIDs;
 }
 
-std::vector<TownID> Datastructures::find_towns(const Name &/*name*/)
+std::vector<TownID> Datastructures::find_towns(const Name &name)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("find_towns()");
+    std::vector<TownID> withname;
+    for(std::map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+        if( i->second.name_ == name){
+            withname.push_back(i -> first);
+        }
+    }
+
+    return withname;
 }
 
-bool Datastructures::change_town_name(TownID /*id*/, const Name &/*newname*/)
+bool Datastructures::change_town_name(TownID id, const Name &newname)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("change_town_name()");
+    std::map<TownID ,Town>::iterator i = Towns.find(id);
+    if(i == Towns.end()){ // ID doesn't exist!
+        return false;
+    }
+    else{
+        i -> second.name_ = newname;
+    }
+
+    return true;
 }
 
 std::vector<TownID> Datastructures::towns_alphabetically()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("towns_alphabetically()");
+    /* ID the same as the beginning of towns name and map is already in alph. order... */
+    return all_towns();
+
 }
 
 std::vector<TownID> Datastructures::towns_distance_increasing()

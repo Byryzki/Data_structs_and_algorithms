@@ -1,8 +1,8 @@
 // Datastructures.hh
 //
-// Student name:
-// Student email:
-// Student number:
+// Student name: Pyry Laine
+// Student email: pyry.j.laine@tuni.fi
+// Student number: 50282836
 
 #ifndef DATASTRUCTURES_HH
 #define DATASTRUCTURES_HH
@@ -14,6 +14,7 @@
 #include <limits>
 #include <functional>
 #include <exception>
+#include <map>
 
 // Types for IDs
 using TownID = std::string;
@@ -95,12 +96,12 @@ public:
     Datastructures();
     ~Datastructures();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: function has to return only the size value that is already known.
     unsigned int town_count();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Program has to delete an element at a time.
     void clear_all();
 
     // Estimate of performance:
@@ -177,8 +178,17 @@ public:
     // Short rationale for estimate:
     int total_net_tax(TownID id);
 
+    TownID get_id();
+
 private:
     // Add stuff needed for your class implementation here
+    struct Town{
+      std::string name_;
+      Coord coord_;
+      int tax_;
+    };
+
+    std::map<TownID ,Town> Towns;
 
 };
 
