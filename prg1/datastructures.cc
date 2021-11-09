@@ -137,20 +137,19 @@ std::vector<TownID> Datastructures::towns_alphabetically()
 std::vector<TownID> Datastructures::towns_distance_increasing()
 {
     std::vector<TownID> ready;
-    std::vector<std::pair<TownID, float>> dists;
+
 
     for(std::map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         float d = sqrt((i-> second.coord_.x * i-> second.coord_.x)+(i-> second.coord_.y * i-> second.coord_.y));
-        dists.push_back({i->first, d});
+
+        alldists.insert({d, i-> first});
+
+        }
+
+    for(std::map<float,TownID>::iterator k = alldists.begin(); k != alldists.end(); ++k){
+        ready.push_back(k->second);
     }
 
-    std::sort(dists.begin(), dists.end(), [](std::pair<TownID, float> &left, std::pair<TownID, float> &right){
-        return left.second < right.second;
-    });
-
-    for(std::vector<std::pair<TownID, float>>::iterator k = dists.begin(); k != dists.end(); ++k){
-        ready.push_back(k->first);
-    }
 
     return ready;
 }
@@ -160,8 +159,11 @@ TownID Datastructures::min_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
+    if(alldists.empty()){ // town distances allready counted
+        return towns_distance_increasing()[0];
+    }
 
-    return towns_distance_increasing()[0];
+    return alldists.begin()->second;
 }
 
 TownID Datastructures::max_distance()
@@ -169,8 +171,11 @@ TownID Datastructures::max_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
+    if(alldists.empty()){ // town distances allready counted
+        return towns_distance_increasing().back();
+    }
 
-    return towns_distance_increasing().back();
+    return alldists.end()->second;
 }
 
 bool Datastructures::add_vassalship(TownID vassalid, TownID masterid)
@@ -220,6 +225,7 @@ std::vector<TownID> Datastructures::taxer_path(TownID id)
         id = Towns.at(id).master_;
     }
 
+
     return taxpath;
 }
 
@@ -247,7 +253,7 @@ bool Datastructures::remove_town(TownID id)
     return true;
 }
 
-std::vector<TownID> Datastructures::towns_nearest(Coord coord)
+std::vector<TownID> Datastructures::towns_nearest(Coord coord) //korjaa!!!
 {
     std::vector<TownID> ready;
     std::vector<std::pair<TownID, float>> dists;
@@ -271,28 +277,14 @@ std::vector<TownID> Datastructures::towns_nearest(Coord coord)
 
     return ready;
 }
-
+/*
 std::vector<TownID> Datastructures::longest_vassal_path(TownID id)
 {
-    std::vector<TownID> taxpath;
 
-    if(Towns.find(id) == Towns.end()){ //town not found
-        taxpath.push_back(NO_TOWNID);
-    }
-
-    taxpath.push_back(id);
-    while(Towns.at(id).master_ != "")
-    {
-        taxpath.push_back(Towns.at(id).master_);
-        id = Towns.at(id).master_;
-    }
-
-    return taxpath;
 }
 
-int Datastructures::total_net_tax(TownID /*id*/)
+int Datastructures::total_net_tax(TownID id)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("total_net_tax()");
+
 }
+*/

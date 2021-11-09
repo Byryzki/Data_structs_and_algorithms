@@ -97,77 +97,81 @@ public:
     ~Datastructures();
 
     // Estimate of performance: O(1)
-    // Short rationale for estimate: function has to return only the size value that is already known.
+    // Short rationale for estimate: Function has to return only the size value that is already known.
     unsigned int town_count();
 
     // Estimate of performance: O(N)
     // Short rationale for estimate: Program has to delete an element at a time.
     void clear_all();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(log n), Omega(N)
+    // Short rationale for estimate: Inserting to map is worst case log(n) and if ID already in use
+    // std::find is O(N) complex.
     bool add_town(TownID id, Name const& name, Coord coord, int tax);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Finding if town exists is O(N) and returning name is O(1)
     Name get_town_name(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Finding if town exists is O(N) and returning coord is O(1)
     Coord get_town_coordinates(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Finding if town exists is O(N) and returning tax is O(1)
     int get_town_tax(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: For looping all the items from map keys to vector is O(N) complex
     std::vector<TownID> all_towns();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: For looping through items is O(N)
     std::vector<TownID> find_towns(Name const& name);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: If ID is not found, for loop goes through all items
     bool change_town_name(TownID id, Name const& newname);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Since map is already in alphabetical order, this function only returns
+    // "all_towns" -function which has complexity of O(N)
     std::vector<TownID> towns_alphabetically();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N*log(n)+2N)
+    // Short rationale for estimate: two forloops: O(2N) + sort: O(N*log(n)) = O(N*log(n)+2N)
     std::vector<TownID> towns_distance_increasing();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N*log(n)+2N) (Omega(1))
+    // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
+    // the maps's first value is returned
     TownID min_distance();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N*log(n)+2N) (Omega(1))
+    // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
+    // the maps's last value is returned
     TownID max_distance();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Instering data to map's index in O(N) complex.
     bool add_vassalship(TownID vassalid, TownID masterid);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Function includes a for loop that includes most of the operations.
     std::vector<TownID> get_town_vassals(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: While loop includes most of the operations.
     std::vector<TownID> taxer_path(TownID id);
 
     // Non-compulsory phase 1 operations
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(3N)
+    // Short rationale for estimate: Function has 2 separate for loops and one std::find with O(N) complexity.
     bool remove_town(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(log(n)+2N)
+    // Short rationale for estimate: 2 forloops with complexity of O(N) and a std::sort with O(log(n)) complexity.
     std::vector<TownID> towns_nearest(Coord coord);
 
     // Estimate of performance:
@@ -187,10 +191,11 @@ private:
       Coord coord_;
       int tax_;
       TownID master_;
+      //std::vector<TownID> vassalpath_;
     };
 
     std::map<TownID ,Town> Towns;
-
+    std::map<float,TownID> alldists;
 };
 
 #endif // DATASTRUCTURES_HH
