@@ -104,8 +104,8 @@ public:
     // Short rationale for estimate: Program has to delete an element at a time.
     void clear_all();
 
-    // Estimate of performance: O(log n), Omega(N)
-    // Short rationale for estimate: Inserting to map is worst case log(n) and if ID already in use
+    // Estimate of performance: O(log n)
+    // Short rationale for estimate: Inserting to map is worst case log(n) + searching if ID already in use
     // std::find is O(N) complex.
     bool add_town(TownID id, Name const& name, Coord coord, int tax);
 
@@ -138,16 +138,16 @@ public:
     // "all_towns" -function which has complexity of O(N)
     std::vector<TownID> towns_alphabetically();
 
-    // Estimate of performance: O(N*log(n)+2N)
-    // Short rationale for estimate: two forloops: O(2N) + sort: O(N*log(n)) = O(N*log(n)+2N)
+    // Estimate of performance: O(nlog(n))
+    // Short rationale for estimate: forloop + map insertion O(nlog(n)) = O(nlog(n))
     std::vector<TownID> towns_distance_increasing();
 
-    // Estimate of performance: O(N*log(n)+2N) (Omega(1))
+    // Estimate of performance: O(nlog(n)) (Omega(1))
     // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
     // the maps's first value is returned
     TownID min_distance();
 
-    // Estimate of performance: O(N*log(n)+2N) (Omega(1))
+    // Estimate of performance: O(nlog(n)) (Omega(1))
     // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
     // the maps's last value is returned
     TownID max_distance();
@@ -166,11 +166,11 @@ public:
 
     // Non-compulsory phase 1 operations
 
-    // Estimate of performance: O(3N)
+    // Estimate of performance: O(N)
     // Short rationale for estimate: Function has 2 separate for loops and one std::find with O(N) complexity.
     bool remove_town(TownID id);
 
-    // Estimate of performance: O(log(n)+2N)
+    // Estimate of performance: O(log(n))
     // Short rationale for estimate: 2 forloops with complexity of O(N) and a std::sort with O(log(n)) complexity.
     std::vector<TownID> towns_nearest(Coord coord);
 
@@ -196,6 +196,8 @@ private:
 
     std::map<TownID ,Town> Towns;
     std::map<float,TownID> alldists;
+    // stl_algorithm.h could'nt handle pointers in iterators so I had to left the pointers out :/
+    // tekemistä: unordered_map, min/max_element, t_distance_increasing, towns_nearest, pointterit?
 };
 
 #endif // DATASTRUCTURES_HH

@@ -48,7 +48,7 @@ void Datastructures::clear_all()
 }
 
 bool Datastructures::add_town(TownID id, const Name &name , Coord coord, int tax)
-{    
+{
     if(Towns.find(id) != Towns.end()){ // ID already in use!
         return false;
     }
@@ -143,13 +143,8 @@ std::vector<TownID> Datastructures::towns_distance_increasing()
         float d = sqrt((i-> second.coord_.x * i-> second.coord_.x)+(i-> second.coord_.y * i-> second.coord_.y));
 
         alldists.insert({d, i-> first});
-
+        ready.push_back(i->first);
         }
-
-    for(std::map<float,TownID>::iterator k = alldists.begin(); k != alldists.end(); ++k){
-        ready.push_back(k->second);
-    }
-
 
     return ready;
 }
@@ -277,14 +272,14 @@ std::vector<TownID> Datastructures::towns_nearest(Coord coord) //korjaa!!!
 
     return ready;
 }
-/*
-std::vector<TownID> Datastructures::longest_vassal_path(TownID id)
-{
 
+std::vector<TownID> Datastructures::longest_vassal_path(TownID /*id*/)
+{
+    throw NotImplemented("longest_vassal_path()");
 }
 
-int Datastructures::total_net_tax(TownID id)
+int Datastructures::total_net_tax(TownID /*id*/)
 {
-
+    throw NotImplemented("total_net_tax()");
 }
-*/
+
