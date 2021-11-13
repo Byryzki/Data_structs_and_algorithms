@@ -104,8 +104,8 @@ public:
     // Short rationale for estimate: Program has to delete an element at a time.
     void clear_all();
 
-    // Estimate of performance: O(log n)
-    // Short rationale for estimate: Inserting to map is worst case log(n) + searching if ID already in use
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Inserting to unordered_map is O(N) + searching if ID already in use
     // std::find is O(N) complex.
     bool add_town(TownID id, Name const& name, Coord coord, int tax);
 
@@ -133,9 +133,8 @@ public:
     // Short rationale for estimate: If ID is not found, for loop goes through all items
     bool change_town_name(TownID id, Name const& newname);
 
-    // Estimate of performance: O(N)
-    // Short rationale for estimate: Since map is already in alphabetical order, this function only returns
-    // "all_towns" -function which has complexity of O(N)
+    // Estimate of performance: O(nlog(n)+n)
+    // Short rationale for estimate: Copying values to map is O(nlog(n)) complex and then to vector another O(N)
     std::vector<TownID> towns_alphabetically();
 
     // Estimate of performance: O(nlog(n))
@@ -191,13 +190,14 @@ private:
       Coord coord_;
       int tax_;
       TownID master_;
-      //std::vector<TownID> vassalpath_;
+
     };
 
-    std::map<TownID ,Town> Towns;
+    std:: unordered_map<TownID ,Town> Towns;
     std::map<float,TownID> alldists;
+    std::vector<TownID> alphtowns;
     // stl_algorithm.h could'nt handle pointers in iterators so I had to left the pointers out :/
-    // tekemistä: unordered_map, min/max_element, t_distance_increasing, towns_nearest, pointterit?
+    // tekemistä: towns_nearest, pointterit?
 };
 
 #endif // DATASTRUCTURES_HH

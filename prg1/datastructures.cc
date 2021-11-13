@@ -95,7 +95,7 @@ int Datastructures::get_town_tax(TownID id)
 std::vector<TownID> Datastructures::all_towns()
 {
     std::vector<TownID> allIDs;
-    for(std::map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+    for(std::unordered_map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
         allIDs.push_back(i -> first);
     }
 
@@ -105,7 +105,7 @@ std::vector<TownID> Datastructures::all_towns()
 std::vector<TownID> Datastructures::find_towns(const Name &name)
 {
     std::vector<TownID> withname;
-    for(std::map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+    for(std::unordered_map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
         if( i->second.name_ == name){
             withname.push_back(i -> first);
         }
@@ -116,7 +116,7 @@ std::vector<TownID> Datastructures::find_towns(const Name &name)
 
 bool Datastructures::change_town_name(TownID id, const Name &newname)
 {
-    std::map<TownID ,Town>::iterator i = Towns.find(id);
+    std::unordered_map<TownID ,Town>::iterator i = Towns.find(id);
     if(i == Towns.end()){ // ID doesn't exist!
         return false;
     }
@@ -129,9 +129,19 @@ bool Datastructures::change_town_name(TownID id, const Name &newname)
 
 std::vector<TownID> Datastructures::towns_alphabetically()
 {
-    /* ID the same as the beginning of towns name and map is already in alph. order... */
-    return all_towns();
+    if(!alphtowns.empty()){
+        return alphtowns;
+    }
 
+    std::map<std::string ,TownID> tmp;
+    for(std::unordered_map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+        tmp.insert({i->second.name_, i->first});
+    }
+    for(std::map<std::string, TownID>::iterator k = tmp.begin(); k != tmp.end(); ++k){
+        alphtowns.push_back(k->second);
+    }
+
+    return all_towns();
 }
 
 std::vector<TownID> Datastructures::towns_distance_increasing()
@@ -139,7 +149,7 @@ std::vector<TownID> Datastructures::towns_distance_increasing()
     std::vector<TownID> ready;
 
 
-    for(std::map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+    for(std::unordered_map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         float d = sqrt((i-> second.coord_.x * i-> second.coord_.x)+(i-> second.coord_.y * i-> second.coord_.y));
 
         alldists.insert({d, i-> first});
@@ -192,7 +202,7 @@ std::vector<TownID> Datastructures::get_town_vassals(TownID id)
 {
     std::vector<TownID> vassals;
 
-    for(std::map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+    for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         if(i->second.master_ == id){
             vassals.push_back(i->first);
         }
@@ -230,14 +240,14 @@ bool Datastructures::remove_town(TownID id)
         return false;
     }
     if(Towns.at(id).master_ == ""){ // no master
-        for(std::map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+        for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
             if(i->second.master_ == id){
                 i->second.master_ = "";
             }
         }
     }
     else{
-        for(std::map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+        for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
             if(i->second.master_ == id){
                 i->second.master_ = Towns.find(id)->first;
             }
@@ -253,7 +263,7 @@ std::vector<TownID> Datastructures::towns_nearest(Coord coord) //korjaa!!!
     std::vector<TownID> ready;
     std::vector<std::pair<TownID, float>> dists;
 
-    for(std::map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+    for(std::unordered_map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         float a = i-> second.coord_.x;
         float b = i-> second.coord_.y;
         float j = coord.x;
