@@ -127,36 +127,41 @@ bool Datastructures::change_town_name(TownID id, const Name &newname)
     return true;
 }
 
-std::vector<TownID> Datastructures::towns_alphabetically()
+std::vector<TownID> Datastructures::towns_alphabetically() //korjaa
 {
     if(!alphtowns.empty()){
         return alphtowns;
     }
 
-    std::map<std::string ,TownID> tmp;
-    for(std::unordered_map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
+    std::map<std::string, TownID> tmp;
+
+    for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         tmp.insert({i->second.name_, i->first});
     }
-    for(std::map<std::string, TownID>::iterator k = tmp.begin(); k != tmp.end(); ++k){
-        alphtowns.push_back(k->second);
+
+    for(std::map<std::string, TownID>::iterator i= tmp.begin(); i != tmp.end(); ++i){
+        alphtowns.push_back(i ->second);
     }
 
-    return all_towns();
+    return alphtowns;
 }
 
 std::vector<TownID> Datastructures::towns_distance_increasing()
 {
-    std::vector<TownID> ready;
-
+    if(!d_increasing.empty()){
+        return d_increasing;
+    }
 
     for(std::unordered_map<TownID, Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         float d = sqrt((i-> second.coord_.x * i-> second.coord_.x)+(i-> second.coord_.y * i-> second.coord_.y));
 
         alldists.insert({d, i-> first});
-        ready.push_back(i->first);
         }
+    for(std::map<float,TownID>::iterator i = alldists.begin(); i != alldists.end(); ++i){
+        d_increasing.push_back(i->second);
+    }
 
-    return ready;
+    return d_increasing;
 }
 
 TownID Datastructures::min_distance()
@@ -164,11 +169,11 @@ TownID Datastructures::min_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
-    if(alldists.empty()){ // town distances allready counted
+    if(d_increasing.empty()){ // town distances allready counted
         return towns_distance_increasing()[0];
     }
 
-    return alldists.begin()->second;
+    return d_increasing[0];
 }
 
 TownID Datastructures::max_distance()
@@ -176,11 +181,11 @@ TownID Datastructures::max_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
-    if(alldists.empty()){ // town distances allready counted
+    if(d_increasing.empty()){ // town distances allready counted
         return towns_distance_increasing().back();
     }
 
-    return alldists.end()->second;
+    return d_increasing.back();
 }
 
 bool Datastructures::add_vassalship(TownID vassalid, TownID masterid)
@@ -249,16 +254,16 @@ bool Datastructures::remove_town(TownID id)
     else{
         for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
             if(i->second.master_ == id){
-                i->second.master_ = Towns.find(id)->first;
+                i->second.master_ = Towns.at(id).master_;
             }
         }
     }
-    Towns.erase(Towns.find(id));
+    Towns.erase(id);
 
     return true;
 }
 
-std::vector<TownID> Datastructures::towns_nearest(Coord coord) //korjaa!!!
+std::vector<TownID> Datastructures::towns_nearest(Coord coord)
 {
     std::vector<TownID> ready;
     std::vector<std::pair<TownID, float>> dists;

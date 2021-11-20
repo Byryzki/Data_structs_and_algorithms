@@ -134,11 +134,11 @@ public:
     bool change_town_name(TownID id, Name const& newname);
 
     // Estimate of performance: O(nlog(n)+n)
-    // Short rationale for estimate: Copying values to map is O(nlog(n)) complex and then to vector another O(N)
+    // Short rationale for estimate: Copying values to map is O(nlog(n)) complex and then the vector takes another O(N)
     std::vector<TownID> towns_alphabetically();
 
-    // Estimate of performance: O(nlog(n))
-    // Short rationale for estimate: forloop + map insertion O(nlog(n)) = O(nlog(n))
+    // Estimate of performance: O(nlog(n)+n)
+    // Short rationale for estimate: forloop O(n) + map insertion O(nlog(n)) = O(nlog(n)+n)
     std::vector<TownID> towns_distance_increasing();
 
     // Estimate of performance: O(nlog(n)) (Omega(1))
@@ -165,12 +165,12 @@ public:
 
     // Non-compulsory phase 1 operations
 
-    // Estimate of performance: O(N)
-    // Short rationale for estimate: Function has 2 separate for loops and one std::find with O(N) complexity.
+    // Estimate of performance: O(3N)
+    // Short rationale for estimate: Function has 2 separate for loops and one map remove by key with O(N) complexity.
     bool remove_town(TownID id);
 
-    // Estimate of performance: O(log(n))
-    // Short rationale for estimate: 2 forloops with complexity of O(N) and a std::sort with O(log(n)) complexity.
+    // Estimate of performance: O(log(n)+2N)
+    // Short rationale for estimate: 2 forloops with complexity of O(N) separately from a std::sort with O(log(n)) complexity.
     std::vector<TownID> towns_nearest(Coord coord);
 
     // Estimate of performance:
@@ -193,11 +193,11 @@ private:
 
     };
 
-    std:: unordered_map<TownID ,Town> Towns;
-    std::map<float,TownID> alldists;
+    std::unordered_map<TownID ,Town> Towns;
     std::vector<TownID> alphtowns;
-    // stl_algorithm.h could'nt handle pointers in iterators so I had to left the pointers out :/
-    // tekemistä: towns_nearest, pointterit?
+    std::map<float,TownID> alldists;
+    std::vector<TownID> d_increasing;
+
 };
 
 #endif // DATASTRUCTURES_HH
