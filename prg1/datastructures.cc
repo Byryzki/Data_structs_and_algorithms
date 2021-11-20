@@ -203,16 +203,18 @@ std::vector<TownID> Datastructures::get_town_vassals(TownID id)
 {
     std::vector<TownID> vassals;
 
+    if(Towns.find(id) == Towns.end()){ // no town
+
+        vassals.push_back(NO_TOWNID);
+        return vassals;
+    }
+
     for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
         if(i->second.master_ == id){
             vassals.push_back(i->first);
         }
     }
-/*
-    if(vassals.empty()){
-        vassals.push_back(NO_TOWNID);
-    }
-*/
+
     return vassals;
 }
 
