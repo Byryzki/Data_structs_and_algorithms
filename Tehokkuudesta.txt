@@ -21,9 +21,9 @@ Jotkin funktiot, kuten min- ja maxdist käyttävät lisäksi muita funktioita ap
 tarvittava rakenne on jo muistissa, vältytään turhalta toistolta ja kokonaistehokkuus paranee.
 
 Muut tietorakenteet:
-Käytin funktioiden tulosten tallentamiseen kahta vektoria (alphtown ja d_increasing), jotka molemmat 
-sisälsivät TownID tietotyypin sekä yhtä map -rakennetta (alldists), joka sisälsi desimmaaliluvun 
-avaimena ja TownID:n arvonaan. Vektorit valitsin niiden hyvän tehokkuutensa ja ominaisuuksiensa vuoksi
-, mutta perinteistä map -rakennetta käytin osin siksi, että sen avulla saisin järjestettyä avaimet
-helposti suuruusjärjestykseen. Tämä tapahtuu toki tehokkuudella O(nlog(n)), mutta se ei ole juuri 
-huonompi kuin muissakaan järjestysalgoritmeissa.
+Käytin funktioiden tulosten tallentamiseen kolmea vektoria (alphtown, d_increasing, alltowns), jotka 
+molemmat sisälsivät TownID tietotyypin sekä yhtä map -rakennetta (alldists), joka sisälsi 
+desimmaaliluvun avaimena ja TownID:n arvonaan. Vektorit valitsin niiden hyvän tehokkuutensa ja 
+ominaisuuksiensa vuoksi, mutta perinteistä map -rakennetta käytin osin siksi, että sen avulla saisin 
+järjestettyä avaimet helposti suuruusjärjestykseen. Tämä tapahtuu toki tehokkuudella O(nlog(n)), mutta 
+se ei ole juuri huonompi kuin muissakaan järjestysalgoritmeissa.

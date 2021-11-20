@@ -121,8 +121,8 @@ public:
     // Short rationale for estimate: Finding if town exists is O(N) and returning tax is O(N) (Theta(1))
     int get_town_tax(TownID id);
 
-    // Estimate of performance: O(N)
-    // Short rationale for estimate: For looping all the items from map keys to vector is O(N) complex
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: returns a ready vector or an empty one
     std::vector<TownID> all_towns();
 
     // Estimate of performance: O(N)
@@ -152,26 +152,26 @@ public:
     TownID max_distance();
 
     // Estimate of performance: O(N)
-    // Short rationale for estimate: Instering data to map's index in O(N) complex.
+    // Short rationale for estimate: Instering data to map's index in O(N) complex
     bool add_vassalship(TownID vassalid, TownID masterid);
 
     // Estimate of performance: O(N) (Omega(1))
-    // Short rationale for estimate: Only one for loop with O(n) complexity, if no vassals at all Omega(1).
+    // Short rationale for estimate: Only one for loop with O(n) complexity, if no vassals at all Omega(1)
     std::vector<TownID> get_town_vassals(TownID id);
 
     // Estimate of performance: O(2N)
-    // Short rationale for estimate: While loop is O(n) and if town found in last slot find is N complex .
+    // Short rationale for estimate: While loop is O(n) and if town found in last slot find is N complex
     std::vector<TownID> taxer_path(TownID id);
 
     // Non-compulsory phase 1 operations
 
     // Estimate of performance: O(4N)
-    // Short rationale for estimate: Function has 2 separate for loops and one map remove by key with O(N) complexity.
+    // Short rationale for estimate: Function has 2 separate for loops and one map remove by key with O(N) complexity
     //also a check if town is found in N complex.
     bool remove_town(TownID id);
 
     // Estimate of performance: O(nlog(n)+2N)
-    // Short rationale for estimate: 2 forloops with complexity of O(N) separately from a std::sort with O(nlog(n)) complexity.
+    // Short rationale for estimate: 2 forloops with complexity of O(N) separately from a std::sort with O(nlog(n)) complexity
     std::vector<TownID> towns_nearest(Coord coord);
 
     // Estimate of performance:
@@ -195,10 +195,10 @@ private:
     };
 
     std::unordered_map<TownID ,Town> Towns;
+    std::vector<TownID> alltowns;
     std::vector<TownID> alphtowns;
     std::map<float,TownID> alldists;
     std::vector<TownID> d_increasing;
-
 };
 
 #endif // DATASTRUCTURES_HH

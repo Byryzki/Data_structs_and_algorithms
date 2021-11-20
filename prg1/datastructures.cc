@@ -54,6 +54,7 @@ bool Datastructures::add_town(TownID id, const Name &name , Coord coord, int tax
         newtown.tax_ = tax;
 
         Towns.insert({id, newtown});
+        alltowns.push_back(id);
     }
 
     return true;
@@ -88,12 +89,12 @@ int Datastructures::get_town_tax(TownID id)
 
 std::vector<TownID> Datastructures::all_towns()
 {
-    std::vector<TownID> allIDs;
-    for(std::unordered_map<TownID ,Town>::iterator i= Towns.begin(); i != Towns.end(); ++i){
-        allIDs.push_back(i -> first);
+    if(alltowns.empty()){
+        std::vector<TownID> tmp;
+        return tmp;
     }
 
-    return allIDs;
+    return alltowns;
 }
 
 std::vector<TownID> Datastructures::find_towns(const Name &name)
