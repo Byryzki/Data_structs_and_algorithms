@@ -22,18 +22,12 @@ Type random_in_range(Type start, Type end)
     return static_cast<Type>(start+num);
 }
 
-// Modify the code below to implement the functionality of the class.
-// Also remove comments from the parameter names when you implement
-// an operation (Commenting out parameter name prevents compiler from
-// warning about unused parameters on operations you haven't yet implemented.)
-
 Datastructures::Datastructures()
 {
 }
 
 Datastructures::~Datastructures()
 {
-
 }
 
 unsigned int Datastructures::town_count()
@@ -129,7 +123,7 @@ bool Datastructures::change_town_name(TownID id, const Name &newname)
 
 std::vector<TownID> Datastructures::towns_alphabetically() //korjaa
 {
-    if(!alphtowns.empty()){
+    if(!alphtowns.empty()){ // towns already in order
         return alphtowns;
     }
 
@@ -148,7 +142,7 @@ std::vector<TownID> Datastructures::towns_alphabetically() //korjaa
 
 std::vector<TownID> Datastructures::towns_distance_increasing()
 {
-    if(!d_increasing.empty()){
+    if(!d_increasing.empty()){ // town distances already counted
         return d_increasing;
     }
 
@@ -169,7 +163,7 @@ TownID Datastructures::min_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
-    if(d_increasing.empty()){ // town distances allready counted
+    if(d_increasing.empty()){ // town distances already counted
         return towns_distance_increasing()[0];
     }
 
@@ -181,7 +175,7 @@ TownID Datastructures::max_distance()
     if(Towns.empty()){ // no towns
         return NO_TOWNID;
     }
-    if(d_increasing.empty()){ // town distances allready counted
+    if(d_increasing.empty()){ // town distances already counted
         return towns_distance_increasing().back();
     }
 
