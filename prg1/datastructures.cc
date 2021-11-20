@@ -38,6 +38,7 @@ unsigned int Datastructures::town_count()
 void Datastructures::clear_all()
 {
     Towns.clear();
+    alltowns.clear();
     town_count();
 }
 
