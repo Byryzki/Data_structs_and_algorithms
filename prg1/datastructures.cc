@@ -208,11 +208,11 @@ std::vector<TownID> Datastructures::get_town_vassals(TownID id)
             vassals.push_back(i->first);
         }
     }
-
+/*
     if(vassals.empty()){
         vassals.push_back(NO_TOWNID);
     }
-
+*/
     return vassals;
 }
 
