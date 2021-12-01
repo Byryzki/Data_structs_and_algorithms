@@ -362,25 +362,26 @@ std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
             i->second.visited_ = false;
         }
         std::vector<TownID> ready;
-        for(std::vector<TownID>::iterator i=path.begin(); i != path.end(); ++i){
-            ready.push_back(*i);
+        for(TownID town : path){
+            ready.push_back(town);
         }
         path.clear();
+        ready.push_back(to);
         return ready;
     }
 
+    path.push_back(from);
     std::vector<TownID> tmp = get_roads_from(from);
     Towns[from].visited_ = true;
-    for(size_t i=0; i <= tmp.size(); ++i){
-        if(Towns[tmp[i]].visited_ == false){
-            path.push_back(tmp[i]);
-            return any_route(tmp[i], to);
+    for(TownID town : tmp){
+        if(Towns[town].visited_ == false){
+            return any_route(town, to);
         }
 
     }
 
     path.pop_back();
-    return any_route(tmp[0], to);
+    return any_route(tmp[0], to); //ongelma
 }
 
 bool Datastructures::remove_road(TownID /*town1*/, TownID /*town2*/)
