@@ -14,6 +14,7 @@
 #include <limits>
 #include <functional>
 #include <exception>
+#include <map>
 
 // Types for IDs
 using TownID = std::string;
@@ -95,78 +96,82 @@ public:
     Datastructures();
     ~Datastructures();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: Function has to return only the size value that is already known.
     unsigned int town_count();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Program has to delete an element at a time.
     void clear_all();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Inserting to unordered_map is O(N) + searching if ID already in use
+    // std::find is O(N) complex.
     bool add_town(TownID id, Name const& name, Coord coord, int tax);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(2N) (Theta(N))
+    // Short rationale for estimate: Finding if town exists is O(N) and returning name is O(N) (Theta(1))
     Name get_town_name(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(2N) (Theta(N))
+    // Short rationale for estimate: Finding if town exists is O(N) and returning coord is O(N) (Theta(1))
     Coord get_town_coordinates(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(2N) (Theta(N))
+    // Short rationale for estimate: Finding if town exists is O(N) and returning tax is O(N) (Theta(1))
     int get_town_tax(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: returns a ready vector or an empty one
     std::vector<TownID> all_towns();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: For looping through items is O(N)
     std::vector<TownID> find_towns(Name const& name);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: If ID is not found, find goes through all items
     bool change_town_name(TownID id, Name const& newname);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(nlog(n)+n) (Omega(1))
+    // Short rationale for estimate: Copying values to map is O(nlog(n)) complex and then the vector takes another O(N)
     std::vector<TownID> towns_alphabetically();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(nlog(n)+n) Omega(1)
+    // Short rationale for estimate: forloop O(n) + map insertion O(nlog(n)) = O(nlog(n)+n)
     std::vector<TownID> towns_distance_increasing();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(nlog(n)+n) (Omega(1))
+    // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
+    // the maps's first value is returned
     TownID min_distance();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(nlog(n)+n) (Omega(1))
+    // Short rationale for estimate: If distance_increasing not previously run, that have to be done, else
+    // the maps's last value is returned
     TownID max_distance();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: Instering data to map's index in O(N) complex
     bool add_vassalship(TownID vassalid, TownID masterid);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N) (Omega(1))
+    // Short rationale for estimate: Only one for loop with O(n) complexity, if no vassals at all Omega(1)
     std::vector<TownID> get_town_vassals(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(2N)
+    // Short rationale for estimate: While loop is O(n) and if town found in last slot find is N complex
     std::vector<TownID> taxer_path(TownID id);
 
     // Non-compulsory phase 1 operations
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(4N)
+    // Short rationale for estimate: Function has 2 separate for loops and one map remove by key with O(N) complexity
+    //also a check if town is found in N complex.
     bool remove_town(TownID id);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(nlog(n)+2N)
+    // Short rationale for estimate: 2 forloops with complexity of O(N) separately from a std::sort with O(nlog(n)) complexity
     std::vector<TownID> towns_nearest(Coord coord);
 
     // Estimate of performance:
@@ -177,6 +182,7 @@ public:
     // Short rationale for estimate:
     int total_net_tax(TownID id);
 
+    TownID get_id();
 
     // Phase 2 operations
 
@@ -223,7 +229,19 @@ public:
     Distance trim_road_network();
 
 private:
-    // Add stuff needed for your class implementation here
+    struct Town{
+      std::string name_;
+      Coord coord_;
+      int tax_;
+      TownID master_;
+
+    };
+
+    std::unordered_map<TownID ,Town> Towns;
+    std::vector<TownID> alltowns;
+    std::vector<TownID> alphtowns;
+    std::map<float,TownID> alldists;
+    std::vector<TownID> d_increasing;
 
 };
 
