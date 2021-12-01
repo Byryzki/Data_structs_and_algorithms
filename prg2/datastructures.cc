@@ -8,6 +8,8 @@
 #include <random>
 #include <cmath>
 #include <algorithm>
+#include <map>
+#include <vector>
 
 std::minstd_rand rand_engine; // Reasonably quick pseudo-random generator
 
@@ -39,6 +41,7 @@ void Datastructures::clear_all()
 {
     Towns.clear();
     alltowns.clear();
+    allroads.clear();
     town_count();
 }
 
@@ -303,35 +306,81 @@ int Datastructures::total_net_tax(TownID /*id*/)
 
 void Datastructures::clear_roads()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("clear_roads()");
+    allroads.clear();
 }
 
 std::vector<std::pair<TownID, TownID>> Datastructures::all_roads()
 {
-    // Replace the line below with your implementation
-    throw NotImplemented("all_roads()");
+    return allroads;
 }
 
-bool Datastructures::add_road(TownID /*town1*/, TownID /*town2*/)
+bool Datastructures::add_road(TownID fst, TownID snd)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("add_road()");
+    if(Towns.find(fst) == Towns.end() || Towns.find(snd) == Towns.end()){ // no town
+            return false;
+        }
+
+    for(std::vector<std::pair<TownID, TownID>>::iterator i= allroads.begin(); i != allroads.end(); ++i){ //already have the road
+        if(i->first == fst && i->second == snd){
+            return false;
+        }
+        else if(fst == snd){
+            return false;
+        }
+    }
+
+    allroads.push_back({fst,snd});
+
+    return true;
 }
 
-std::vector<TownID> Datastructures::get_roads_from(TownID /*id*/)
+std::vector<TownID> Datastructures::get_roads_from(TownID from)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("get_roads_from()");
+    std::vector<TownID> tmp;
+    if(Towns.find(from) == Towns.end()){
+        tmp.push_back(NO_TOWNID);
+        return tmp;
+    }
+
+    for(std::vector<std::pair<TownID, TownID>>::iterator i= allroads.begin(); i != allroads.end(); ++i){ //already have the road
+        if(i->first == from){
+            tmp.push_back(i->second);
+        }
+        else if(i->second == from){
+            tmp.push_back(i->first);
+        }
+    }
+
+    return tmp;
 }
 
-std::vector<TownID> Datastructures::any_route(TownID /*fromid*/, TownID /*toid*/)
+std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
-    throw NotImplemented("any_route()");
+    /* DFS...ish */
+    if(from == to){
+        for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+            i->second.visited_ = false;
+        }
+        std::vector<TownID> ready;
+        for(std::vector<TownID>::iterator i=path.begin(); i != path.end(); ++i){
+            ready.push_back(*i);
+        }
+        path.clear();
+        return ready;
+    }
+
+    std::vector<TownID> tmp = get_roads_from(from);
+    Towns[from].visited_ = true;
+    for(size_t i=0; i <= tmp.size(); ++i){
+        if(Towns[tmp[i]].visited_ == false){
+            path.push_back(tmp[i]);
+            return any_route(tmp[i], to);
+        }
+
+    }
+
+    path.pop_back();
+    return any_route(tmp[0], to);
 }
 
 bool Datastructures::remove_road(TownID /*town1*/, TownID /*town2*/)

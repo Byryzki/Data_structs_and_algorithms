@@ -1,8 +1,8 @@
-// Datastructures.hh
+// Datastructures.cc
 //
-// Student name:
-// Student email:
-// Student number:
+// Student name: Pyry Laine
+// Student email: pyry.j.laine@tuni.fi
+// Student number: 50282836
 
 #ifndef DATASTRUCTURES_HH
 #define DATASTRUCTURES_HH
@@ -234,7 +234,13 @@ private:
       Coord coord_;
       int tax_;
       TownID master_;
+      bool visited_;
 
+    };
+
+    struct Road{
+        TownID start;
+        TownID stop;
     };
 
     std::unordered_map<TownID ,Town> Towns;
@@ -242,6 +248,11 @@ private:
     std::vector<TownID> alphtowns;
     std::map<float,TownID> alldists;
     std::vector<TownID> d_increasing;
+
+    std::vector<std::pair<TownID, TownID>> allroads;
+    std::vector<TownID> path;
+
+    //read "../prg2/example-data.txt"
 
 };
 
