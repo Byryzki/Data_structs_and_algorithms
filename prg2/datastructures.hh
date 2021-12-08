@@ -202,6 +202,8 @@ public:
     // Short rationale for estimate:
     std::vector<TownID> get_roads_from(TownID id);
 
+    bool DFS(TownID from, TownID to);
+
     // Estimate of performance:
     // Short rationale for estimate:
     std::vector<TownID> any_route(TownID fromid, TownID toid);
@@ -250,6 +252,7 @@ private:
     std::vector<TownID> d_increasing;
 
     std::vector<std::pair<TownID, TownID>> allroads;
+    std::unordered_map<TownID, std::vector<TownID>> edges;
     std::vector<TownID> path;
 
     //read "../prg2/example-data.txt"

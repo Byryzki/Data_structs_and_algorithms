@@ -1,0 +1,49 @@
+bool Datastructures::DFS(TownID from, TownID to)
+{
+    /* DFS...ish */
+    if(from == to){
+        for(std::unordered_map<TownID ,Town>::iterator i = Towns.begin(); i != Towns.end(); ++i){
+            i->second.visited_ = false;
+        }
+        std::vector<TownID> ready;
+        for(TownID town : path){
+            ready.push_back(town);
+        }
+        return true;
+    }
+
+    if(DFS(from, to)) return true;
+
+    path.push_back(from);
+    Towns[from].visited_ = true;
+    for(std::vector<TownID>::iterator nextown=edges[from].begin(); nextown != edges[from].end(); ++nextown){
+        if(Towns[*nextown].visited_ == false){
+            any_route(*nextown, to);
+        }
+    }
+    any_route(*edges[from].begin(), to);
+
+    return false;
+}
+
+std::vector<TownID> Datastructures::any_route(TownID from, TownID to) //kokeile voidina
+{
+    if(edges.empty()){ // builds road "network"
+        for(TownID id : alltowns){
+            std::vector<TownID> roads = get_roads_from(id);
+            edges.insert({id,roads});
+        }
+    }
+
+    DFS(from, to);
+
+    std::vector<TownID> ready;
+    for(TownID town : path){
+        ready.push_back(town);
+    }
+    //path.clear();
+    ready.push_back(to);
+    return ready;
+
+    return path;
+}
