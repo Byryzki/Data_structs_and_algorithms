@@ -186,26 +186,26 @@ public:
 
     // Phase 2 operations
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: erases elements one by one.
     void clear_roads();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: Solely returns ready data structure.
     std::vector<std::pair<TownID, TownID>> all_roads();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: has 4 for-loops with O(N) each
     bool add_road(TownID town1, TownID town2);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: town check: O(N), vectorr search: O(N)
     std::vector<TownID> get_roads_from(TownID id);
 
     bool DFS(TownID from, TownID to);
 
     // Estimate of performance:
-    // Short rationale for estimate:
+    // Short rationale for estimate: 4 separate 4 foops woth O(N) and
     std::vector<TownID> any_route(TownID fromid, TownID toid);
 
     // Non-compulsory phase 2 operations
@@ -252,7 +252,7 @@ private:
     std::vector<TownID> d_increasing;
 
     std::vector<std::pair<TownID, TownID>> allroads;
-    std::unordered_map<TownID, std::vector<TownID>> edges;
+    std::unordered_map<TownID, std::vector<std::pair<TownID, float>>> edges;
     std::vector<TownID> path;
 
     //read "../prg2/example-data.txt"
