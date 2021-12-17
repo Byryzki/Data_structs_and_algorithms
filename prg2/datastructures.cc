@@ -41,8 +41,12 @@ void Datastructures::clear_all()
 {
     Towns.clear();
     alltowns.clear();
+    alphtowns.clear();
     allroads.clear();
-    town_count();
+    d_increasing.clear();
+    alldists.clear();
+    edges.clear();
+    Towns.size();
 }
 
 bool Datastructures::add_town(TownID id, const Name &name , Coord coord, int tax)
@@ -307,6 +311,7 @@ int Datastructures::total_net_tax(TownID /*id*/)
 void Datastructures::clear_roads()
 {
     allroads.clear();
+    edges.clear();
 }
 
 std::vector<std::pair<TownID, TownID>> Datastructures::all_roads()
@@ -331,27 +336,32 @@ bool Datastructures::add_road(TownID fst, TownID snd)
 
     allroads.push_back({fst,snd});
 
+    if(edges.find(fst) == edges.end()){
+        std::vector<TownID> tmp;
+        edges.insert({fst, tmp});
+    }
+
+    if(edges.find(snd) == edges.end()){
+        std::vector<TownID> tmp;
+        edges.insert({snd, tmp});
+    }
+
+    edges[fst].push_back(snd);
+    edges[snd].push_back(fst);
+
     return true;
 }
 
 std::vector<TownID> Datastructures::get_roads_from(TownID from)
 {
-    std::vector<TownID> tmp;
+
     if(Towns.find(from) == Towns.end()){
+        std::vector<TownID> tmp;
         tmp.push_back(NO_TOWNID);
         return tmp;
     }
 
-    for(std::vector<std::pair<TownID, TownID>>::iterator i= allroads.begin(); i != allroads.end(); ++i){ //already have the road
-        if(i->first == from){
-            tmp.push_back(i->second);
-        }
-        else if(i->second == from){
-            tmp.push_back(i->first);
-        }
-    }
-
-    return tmp;
+    return edges[from];
 }
 
 bool Datastructures::DFS(TownID from, TownID to)
@@ -377,12 +387,14 @@ bool Datastructures::DFS(TownID from, TownID to)
 
 std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
 {
-    path.clear();
-    if(edges.empty()){ // builds road "network"
-        for(TownID id : alltowns){
-            std::vector<TownID> roads = get_roads_from(id);
-            edges.insert({id,roads});
+    if(Towns.find(from) == Towns.end() || Towns.find(to) == Towns.end()){ // no town
+        std::vector<TownID> tmp;
+        tmp.push_back(NO_TOWNID);
+        return tmp;
         }
+
+    if(!path.empty()){
+    path.clear();
     }
 
     DFS(from, to);
@@ -395,10 +407,8 @@ std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
     return path;
 }
 
-bool Datastructures::remove_road(TownID /*town1*/, TownID /*town2*/)
+bool Datastructures::remove_road(TownID /*fst*/, TownID /*snd*/)
 {
-    // Replace the line below with your implementation
-    // Also uncomment parameters ( /* param */ -> param )
     throw NotImplemented("remove_road()");
 }
 

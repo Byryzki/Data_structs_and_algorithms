@@ -101,7 +101,7 @@ public:
     unsigned int town_count();
 
     // Estimate of performance: O(N)
-    // Short rationale for estimate: Program has to delete an element at a time.
+    // Short rationale for estimate: Total of 7 .clears with O(N) each and .size with O(1).
     void clear_all();
 
     // Estimate of performance: O(N)
@@ -186,26 +186,27 @@ public:
 
     // Phase 2 operations
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: .clear removes roads one by one from both vector and map.
     void clear_roads();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(1)
+    // Short rationale for estimate: only needed to return existing vector.
     std::vector<std::pair<TownID, TownID>> all_roads();
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: 4 checks with O(N), 2 push_backs inside map with O(N) and 2 map insertions
+    // inside if-statements with O(log(N)).
     bool add_road(TownID town1, TownID town2);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N)
+    // Short rationale for estimate: check in O(N) and the real function O(1).
     std::vector<TownID> get_roads_from(TownID id);
 
     bool DFS(TownID from, TownID to);
 
-    // Estimate of performance:
-    // Short rationale for estimate:
+    // Estimate of performance: O(N^2)
+    // Short rationale for estimate: checks, .clear and for-loop O(N), recursive DFS: O(N^2) and reverse in O(N/2).
     std::vector<TownID> any_route(TownID fromid, TownID toid);
 
     // Non-compulsory phase 2 operations
