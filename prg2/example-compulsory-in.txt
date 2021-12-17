@@ -1,5 +1,5 @@
 clear_all
-read "example-data.txt"
+read "../prg2/example-data.txt"
 all_roads
 roads_from Tpe
 any_route Tku Hki

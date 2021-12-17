@@ -334,9 +334,9 @@ bool Datastructures::add_road(TownID fst, TownID snd)
         }
     }
 
-    allroads.push_back({fst,snd});
+    if(fst < snd) allroads.push_back({fst,snd});
+    else allroads.push_back({snd,fst});
 
-<<<<<<< HEAD
     if(edges.find(fst) == edges.end()){
         std::vector<TownID> tmp;
         edges.insert({fst, tmp});
@@ -347,41 +347,15 @@ bool Datastructures::add_road(TownID fst, TownID snd)
         edges.insert({snd, tmp});
     }
 
-    edges[fst].push_back(snd);
-    edges[snd].push_back(fst);
-=======
-    float x1 = Towns[fst].coord_.x;
-    float y1 = Towns[fst].coord_.y;
-    float x2 = Towns[snd].coord_.x;
-    float y2 = Towns[snd].coord_.y;
-    float d = sqrt(((x1 * x1)-2*x1*x2+(x2 * x2))+(y1 * y1)-2*y1*y2+(y2 * y2));
+        edges[fst].push_back(snd);
+        edges[snd].push_back(fst);
 
-    if(edges.find(fst) == edges.end()){
-        std::vector<std::pair<TownID, float>> tmp;
-        tmp.push_back({snd,d});
-        edges.insert({fst,tmp});
-    }
-    else{
-        edges.find(fst)->second.push_back({snd,d});
-    }
-
-    if(edges.find(snd) == edges.end()){
-        std::vector<std::pair<TownID, float>> tmp;
-        tmp.push_back({fst,d});
-        edges.insert({snd,tmp});
-    }
-    else{
-        edges.find(snd)->second.push_back({fst,d});
-    }
->>>>>>> 2b290c5c891b332bcdd003e57c2e01e3b31cf5be
 
     return true;
 }
 
 std::vector<TownID> Datastructures::get_roads_from(TownID from)
 {
-<<<<<<< HEAD
-
     if(Towns.find(from) == Towns.end()){
         std::vector<TownID> tmp;
         tmp.push_back(NO_TOWNID);
@@ -389,20 +363,7 @@ std::vector<TownID> Datastructures::get_roads_from(TownID from)
     }
 
     return edges[from];
-=======
-    std::vector<TownID> roads;
 
-    if(edges.find(from) == edges.end()){
-        roads.push_back(NO_TOWNID);
-        return roads;
-    }
-
-    for(std::vector<std::pair<TownID, float>>::iterator road = edges[from].begin(); road != edges[from].end(); ++road){
-        roads.push_back(road->first);
-    }
-
-    return roads;
->>>>>>> 2b290c5c891b332bcdd003e57c2e01e3b31cf5be
 }
 
 bool Datastructures::DFS(TownID from, TownID to)
@@ -414,9 +375,9 @@ bool Datastructures::DFS(TownID from, TownID to)
         return true;
     }
 
-    for(std::vector<std::pair<TownID, float>>::iterator next = edges[from].begin(); next != edges[from].end(); ++next){
-        if(Towns[next->first].visited_ == false){
-            if(DFS(next->first, to)){
+    for(TownID next : edges[from]){
+        if(Towns[next].visited_ == false){
+            if(DFS(next, to)){
                 path.push_back(from);
                 return true;
             }
@@ -428,7 +389,6 @@ bool Datastructures::DFS(TownID from, TownID to)
 
 std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
 {
-<<<<<<< HEAD
     if(Towns.find(from) == Towns.end() || Towns.find(to) == Towns.end()){ // no town
         std::vector<TownID> tmp;
         tmp.push_back(NO_TOWNID);
@@ -437,13 +397,6 @@ std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
 
     if(!path.empty()){
     path.clear();
-=======
-    path.clear();
-
-    if(Towns.find(from) == Towns.end() || Towns.find(to) == Towns.end()){ // no town
-        path.push_back(NO_TOWNID);
-        return path;
->>>>>>> 2b290c5c891b332bcdd003e57c2e01e3b31cf5be
     }
 
     DFS(from, to);
@@ -452,9 +405,7 @@ std::vector<TownID> Datastructures::any_route(TownID from, TownID to)
         i->second.visited_ = false;
     }
 
-    if(!path.empty()){
-        std::reverse(path.begin(), path.end());
-    }
+    std::reverse(path.begin(), path.end());
 
     return path;
 }
